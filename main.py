@@ -12,7 +12,8 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
  
-response = requests.get('http://api.wunderground.com/api/5ba5077954b9ecff/conditions/lang:SP/q/MX/Morelia.json')
+response = requests.get('http://api.wunderground.com/api/<KEY wunderground>/conditions/lang:SP/q/MX/Morelia.json') 
+#see documentation from more info about languajes and properties
 data = response.json()
 
 Twitt = data['current_observation']['weather'] + " Temperatura:" + str(data['current_observation']['temp_c']) + "°C UV:" + str(data['current_observation']['UV']) + " Humedad:" + str(data['current_observation']['relative_humidity']) + " Visibilidad:" + str(data['current_observation']['visibility_km']) + "Km "
