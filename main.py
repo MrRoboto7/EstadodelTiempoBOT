@@ -11,25 +11,26 @@ ACCESS_SECRET = '<Twitter Credentials>'
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
- 
-response = requests.get('http://api.wunderground.com/api/<KEY wunderground>/conditions/lang:SP/q/MX/Morelia.json') 
-#see documentation from more info about languajes and properties
-data = response.json()
 
-Twitt = data['current_observation']['weather'] + " Temperatura:" + str(data['current_observation']['temp_c']) + "°C UV:" + str(data['current_observation']['UV']) + " Humedad:" + str(data['current_observation']['relative_humidity']) + " Visibilidad:" + str(data['current_observation']['visibility_km']) + "Km "
+While True:
+   response = requests.get('http://api.wunderground.com/api/<KEY wunderground>/conditions/lang:SP/q/MX/Morelia.json') 
+   #see documentation from more info about languajes and properties
+   data = response.json()
 
-precip = float(data['current_observation']['precip_today_metric'])
-if precip > 0:
-    Twitt = Twitt + "Precipitacion:" + precip + " mm."
-else:
-    Twitt = Twitt + "Precipitacion: 0%."
+   Twitt = data['current_observation']['weather'] + " Temperatura:" + str(data['current_observation']['temp_c']) + "°C UV:" + str(data['current_observation']['UV']) + " Humedad:" + str(data['current_observation']['relative_humidity']) + " Visibilidad:" + str(data['current_observation']['visibility_km']) + "Km "
+
+   precip = float(data['current_observation']['precip_today_metric'])
+   if precip > 0:
+      Twitt = Twitt + "Precipitacion:" + precip + " mm."
+   else:
+      Twitt = Twitt + "Precipitacion: 0%."
 
 #image
-url = data['current_observation']['icon_url']
-filename = 'temp.jpg'
-request = requests.get(url, stream=True)
-if request.status_code == 200:
-    with open(filename, 'wb') as image:
+   url = data['current_observation']['icon_url']
+   filename = 'temp.jpg'
+   request = requests.get(url, stream=True)
+   if request.status_code == 200:
+      with open(filename, 'wb') as image:
         for chunk in request:
             image.write(chunk)
     api.update_with_media(filename, status=Twitt)    
